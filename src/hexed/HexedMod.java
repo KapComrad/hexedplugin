@@ -1,6 +1,15 @@
 package hexed;
 
 import arc.*;
+import arc.util.*;
+import mindustry.*;
+import mindustry.content.*;
+import mindustry.game.EventType.*;
+import mindustry.gen.*;
+import mindustry.mod.*;
+import mindustry.net.Administration.*;
+import mindustry.world.blocks.storage.*;
+import arc.*;
 import arc.files.*;
 import arc.func.Intp;
 import arc.math.*;
@@ -70,19 +79,19 @@ public class HexedMod extends Plugin {
     private void spawnPlayerOnOuterHex(
             List<Point2> outerRing, int indexOfPlayer, Seq<Hex> copy, EventType.PlayerJoin event
     ) {
-            Point2 point = outerRing.get(indexOfPlayer);
-            Hex hex = copy.find(h -> h.controller == null && h.x == point.x && h.y == point.y && h.spawnTime.get());
-            System.out.println(hex);
-            if(hex == null){
-                System.out.println("I AM HERE!");
-                Call.infoMessage(event.player.con, "There are currently no empty hex spaces available.\nAssigning into spectator mode.");
-                event.player.unit().kill();
-                event.player.team(Team.derelict);
-                return;
-            }
-            loadout(event.player, point.x, point.y);
-            Core.app.post(() -> data.data(event.player).chosen = false);
-            hex.findController();
+        Point2 point = outerRing.get(indexOfPlayer);
+        Hex hex = copy.find(h -> h.controller == null && h.x == point.x && h.y == point.y && h.spawnTime.get());
+        System.out.println(hex);
+        if (hex == null) {
+            System.out.println("I AM HERE!");
+            Call.infoMessage(event.player.con, "There are currently no empty hex spaces available.\nAssigning into spectator mode.");
+            event.player.unit().kill();
+            event.player.team(Team.derelict);
+            return;
+        }
+        loadout(event.player, point.x, point.y);
+        Core.app.post(() -> data.data(event.player).chosen = false);
+        hex.findController();
     }
 
     @Override
@@ -184,12 +193,12 @@ public class HexedMod extends Plugin {
             // здесь происходит спавн игрока в гексах
             if (!active() || event.player.team() == Team.derelict) return;
             Seq<Hex> copy = data.hexes().copy();
-            
+
             if (playerNumber % 2 == 0) {
-                spawnPlayerOnOuterHex(outerRing,playerNumber,copy,event);
+                spawnPlayerOnOuterHex(outerRing, playerNumber, copy, event);
             } else {
                 var formula = outerRing.size() / 2 - 1 + playerNumber;
-                spawnPlayerOnOuterHex(outerRing,formula,copy,event);
+                spawnPlayerOnOuterHex(outerRing, formula, copy, event);
             }
             playerNumber++;
             data.data(event.player).lastMessage.reset();
@@ -313,6 +322,17 @@ public class HexedMod extends Plugin {
         handler.<Player>register("leaderboard", "Display the leaderboard", (args, player) -> {
             player.sendMessage(getLeaderboard());
         });
+
+        handler.<Player>register("pause", "Pause game", (args, player) -> {
+            System.out.println("Game paused");
+            state.set(State.paused);
+        });
+
+        handler.<Player>register("resume", "Resume game", (args, player) -> {
+            System.out.println("Game resumed");
+            state.set(State.playing);
+        });
+        
 
         handler.<Player>register("hexstatus", "Get hex status at your position.", (args, player) -> {
             Hex hex = data.data(player).location;
