@@ -17,12 +17,12 @@ public class HexSpiral {
 
     private static List<Hex> spiral(Hex center, int radius) {
         var results = new ArrayList<Hex>();
+        results.add(new Hex(0, 0, 0));
 
         for (int i = 1; i <= radius; i++) {
             results.addAll(ring(center, i));
         }
-
-        results.add(new Hex(0, 0, 0));
+        
         return results;
     }
 

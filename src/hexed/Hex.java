@@ -36,6 +36,19 @@ public class Hex{
         wy = y * tilesize;
     }
 
+    @Override
+    public String toString() {
+        return "Hex{" +
+                "controller=" + controller +
+                ", rad=" + rad +
+                ", wy=" + wy +
+                ", wx=" + wx +
+                ", y=" + y +
+                ", x=" + x +
+                ", id=" + id +
+                '}';
+    }
+
     public void updateController(){
         controller = findController();
     }
@@ -53,7 +66,7 @@ public class Hex{
     }
 
     public @Nullable Team findController(){
-        if(hasCore()){
+        if (hasCore()) {
             return world.tile(x, y).team();
         }
 
