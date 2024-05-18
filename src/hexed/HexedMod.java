@@ -244,7 +244,19 @@ public class HexedMod extends Plugin{
 
         handler.register("end", "End the game.", args -> endGame());
 
-        handler.register("r", "Restart the server.", args -> System.exit(2));
+        handler.register("r", "Restart the server.", args -> {
+            data = new HexData();
+
+            logic.reset();
+            Log.info("Generating map...");
+            HexedGenerator generator = new HexedGenerator();
+            world.loadGenerator(Hex.size, Hex.size, generator);
+            data.initHexes(generator.getHex());
+            info("Map generated.");
+            state.rules = rules.copy();
+            logic.play();
+            netServer.openServer();
+        });
     }
 
     @Override
