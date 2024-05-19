@@ -126,62 +126,7 @@ public class HexedGenerator implements Cons<Tiles> {
     }
 
     public IntSeq getHex() {
-        IntSeq array = new IntSeq();
-        double h = Math.sqrt(3) * Hex.spacing / 2;
-        return new IntSeq(HexSpiral.spiral(new Point2(400, 400), 2));
-        //base horizontal spacing=1.5w
-        //offset = 3/4w
-//        for(int x = 0; x < width / Hex.spacing - 2; x++){
-//            for(int y = 0; y < height / (h/2) - 2; y++){
-//                int cx = (int)(x * Hex.spacing*1.5 + (y%2)* Hex.spacing*3.0/4) + Hex.spacing/2;
-//                int cy = (int)(y * h / 2) + Hex.spacing/2;
-//                array.add(Point2.pack(cx, cy));
-//            }
-//        }
-
-//        int rings = 3;
-//
-//        for (int ring = 0; ring < rings; ring++) {
-//            int circle;
-//            int centerX = 400;
-//            int centerY = 400;
-//            double radius = 100 * ring;
-//            if(ring == 0) circle = 1;
-//            else circle = ring;
-//            System.out.println("Ring: "+ring);
-//            for (int i = 0; i < 6*circle; i++) {
-//                System.out.println("Radius: "+(int)(i *60/circle)+30);
-//                double angle_rad = Math.toRadians((int)(i *60/circle)+30);
-//                System.out.println("angle rad: "+angle_rad);
-//                int x = centerX + (int) (radius * Math.cos(angle_rad));
-//                int y = centerY + (int) (radius * Math.sin(angle_rad));
-//                array.add(Point2.pack(x, y));
-//            }
-//        }
-//        return array;
-//    }
-
-
-//        array.add(Point2.pack(325, 443));
-//        array.add(Point2.pack(400, 486));
-//        array.add(Point2.pack(475, 443));
-//        array.add(Point2.pack(475, 357));
-//        array.add(Point2.pack(400, 314));
-//        array.add(Point2.pack(325, 357));
-//        array.add(Point2.pack(250, 486));
-//        array.add(Point2.pack(325, 529));
-//        array.add(Point2.pack(400, 573));
-//        array.add(Point2.pack(475, 529));
-//        array.add(Point2.pack(550, 486));
-//        array.add(Point2.pack(550, 400));
-//        array.add(Point2.pack(550, 314));
-//        array.add(Point2.pack(475, 271));
-//        array.add(Point2.pack(400, 227));
-//        array.add(Point2.pack(325, 271));
-//        array.add(Point2.pack(250, 314));
-//        array.add(Point2.pack(250, 400));
-//        array.add(Point2.pack(400, 400));
-//
-//        return array;
+        var radius = Integer.parseInt(System.getenv("RADIUS"));
+        return new IntSeq(HexSpiral.spiral(new Point2(400, 400), radius));
     }
 }

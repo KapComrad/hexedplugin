@@ -83,7 +83,6 @@ public class HexedMod extends Plugin {
         Hex hex = copy.find(h -> h.controller == null && h.x == point.x && h.y == point.y && h.spawnTime.get());
         System.out.println(hex);
         if (hex == null) {
-            System.out.println("I AM HERE!");
             Call.infoMessage(event.player.con, "There are currently no empty hex spaces available.\nAssigning into spectator mode.");
             event.player.unit().kill();
             event.player.team(Team.derelict);
@@ -185,10 +184,9 @@ public class HexedMod extends Plugin {
                 killTiles(event.player.team());
             }
         });
-
-        int[] allRings = spiral(new Point2(400, 400), 2);
-        var n = 1;
-        List<Point2> outerRing = Arrays.stream(allRings).skip(1 + 6 * n).mapToObj(Point2::unpack).toList();
+        var radius = Integer.parseInt(System.getenv("RADIUS"));
+        int[] allRings = spiral(new Point2(400, 400), radius);
+        List<Point2> outerRing = Arrays.stream(allRings).skip(1 + 6 * (long)(radius-1)).mapToObj(Point2::unpack).toList();
         Events.on(PlayerJoin.class, event -> {
             // здесь происходит спавн игрока в гексах
             if (!active() || event.player.team() == Team.derelict) return;
